@@ -2,10 +2,6 @@ const mdLinks = require("../md-links.js");
 const fs = require("fs");
 
 describe("mdLinks", () => {
-  it("should...", () => {
-    console.log("FIX ME!");
-  });
-
   it("La función mdLinks debería devolver una promesa", () => {
     const result = mdLinks("C:/md-links/DEV011-md-links/fake-README.md");
     expect(result).toBeInstanceOf(Promise);
@@ -28,7 +24,8 @@ describe("mdLinks", () => {
   it("El método fs.existsSync devuelve true cuando la ruta existe", async () => {
     const existingPath = "C:/md-links/DEV011-md-links/fake-README.md";
     const result = await fs.existsSync(existingPath);
-    expect(result).toBe(true);
+    expect(result).toBe(true); 
+   
   });
   
   it("El método fs.existsSync devuelve false cuando la ruta no existe", async () => {

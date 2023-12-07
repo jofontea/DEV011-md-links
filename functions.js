@@ -4,7 +4,9 @@ const path = require("path");
 const checkingPath = (route) => {
   // convertir la ruta a absoluta
   const result = path.isAbsolute(route) ? route : path.resolve(route);
-  return result;
+  const normalizedPath = result.replace(/\\/g, '/');
+  return normalizedPath;
+  
 };
 
 

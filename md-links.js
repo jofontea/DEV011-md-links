@@ -5,13 +5,14 @@ const { checkingPath } = require("./functions.js");
 const mdLinks = (examplePath, options) => {
   return new Promise((resolve, reject) => {
     const absolutePath = checkingPath(examplePath);
-
+    const cleanPath = absolutePath.replace(/\\/g, '/');
+    //path.normalize(absolutePath);
     // verificar si la ruta existe
-    if (fs.existsSync(absolutePath)) {
-      resolve({ message: "La ruta existe", path: absolutePath });
+    if (fs.existsSync(cleanPath)) {
+      resolve({ message: "La ruta existe", path: cleanPath });
     } else {
       // si la ruta no existe, se rechaza la promesa
-      reject({ message: "La ruta no existe", path: absolutePath });
+      reject({ message: "La ruta no existe", path: cleanPath });
     }
   });
 };
