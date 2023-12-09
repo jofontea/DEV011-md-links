@@ -1,17 +1,29 @@
 const fs = require("fs");
 const path = require("path");
-const { checkingPath } = require("./functions.js");
+const { checkingPath, checkingFile } = require("./functions.js");
 
 const mdLinks = (examplePath, options) => {
   return new Promise((resolve, reject) => {
     const absolutePath = checkingPath(examplePath);
-    const cleanPath = absolutePath.replace(/\\/g, '/');
+    const cleanPath = absolutePath.replace(/\\/g, "/");
     //path.normalize(absolutePath);
     // verificar si la ruta existe
     if (fs.existsSync(cleanPath)) {
-      resolve({ message: "La ruta existe", path: cleanPath });
+      checkingFile(cleanPath)
+        .then((result) => {
+          console.log(result.message);
+          console.log(result.content);
+          resolve({
+            message: "La ruta y el archivo son válidos",
+            path: cleanPath,
+          });
+        })
+        .catch((error) => {
+          console.error(error.errorMessage);
+          reject({ message: error.errorMessage, path: cleanPath });
+        });
     } else {
-      // si la ruta no existe, se rechaza la promesa
+      // si la ruta no existe, ejecutar el callback con el error
       reject({ message: "La ruta no existe", path: cleanPath });
     }
   });
