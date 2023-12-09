@@ -17,7 +17,7 @@ describe("mdLinks", () => {
   it("La promesa debe resolverse si existe una ruta", () => {
     const realPath = "C:/md-links/DEV011-md-links/fake-README.md";
     return mdLinks(realPath).then((result) => {
-      expect(result).toEqual({ message: "La ruta existe", path: realPath });
+      expect(result).toEqual({ message: "La ruta y el archivo son válidos", path: realPath });
     });
   });
 
