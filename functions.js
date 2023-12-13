@@ -16,7 +16,7 @@ const checkingFile = (filePath) => {
 
     if (fs.existsSync(filePath)) {
       const extOfTheFile = path.extname(filePath);
-      //condición que verifica: a. si existe el archivo b: si existe alguna extensión válida
+      //condición que verifica si existe alguna coincidencia extensión válida
       if (validExtensions.test(extOfTheFile)) {
         fs.readFile(filePath, "utf-8", (err, data) => {
           if (err) {
@@ -28,7 +28,7 @@ const checkingFile = (filePath) => {
           } else {
             resolve({
               isValid: true,
-              message: "La ruta y el archivo son válidos",
+              message: "La ruta existe y el archivo es válido",
               path: filePath,
               content: data,
             });
@@ -48,13 +48,32 @@ const checkingFile = (filePath) => {
         isValid: false,
         errorMessage: "El archivo no existe",
         path: filePath,
-     
       });
     }
   });
 };
 
-module.exports = { checkingPath, checkingFile };
+const findLinks = (content, filePath) => {
+  const regex = /\[([^\]]+)]\(([^)]+)\)/g;
+  //array vacio pa guardar el objeto que tiene text--href--path
+  const links = [];
 
+  // si hay coincidencias en el contenido se ejecuta el bucle
+  for (
+    let match = regex.exec(content);
+    match !== null;
+    match = regex.exec(content)
+  ) {
+    // se extraen el 2do y 3er elemento del array y se asigna a text y href
+    const [, text, href] = match;
+    links.push({
+      href,
+      text,
+      file: filePath,
+    });
+  }
 
+  return links;
+};
 
+module.exports = { checkingPath, checkingFile, findLinks };
