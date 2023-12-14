@@ -55,7 +55,7 @@ const checkingFile = (filePath) => {
 
 const findLinks = (content, filePath) => {
   const regex = /\[([^\]]+)]\(([^)]+)\)/g;
-  //array vacio pa guardar el objeto que tiene text--href--path
+  //array vacio pa guardar el objeto que tiene las propiedades text--href--file
   const links = [];
 
   // si hay coincidencias en el contenido se ejecuta el bucle
@@ -64,7 +64,7 @@ const findLinks = (content, filePath) => {
     match !== null;
     match = regex.exec(content)
   ) {
-    // se extraen el 2do y 3er elemento del array y se asigna a text y href
+    // se extraen el 2do y 3er elemento del array y se asignan a text y href
     const [, text, href] = match;
     links.push({
       href,
