@@ -1,5 +1,7 @@
 const path = require("path");
 const fs = require("fs");
+const axios = require('axios');
+
 // verificar si la ruta es absoluta
 const checkingPath = (route) => {
   // convertir la ruta a absoluta
@@ -57,7 +59,6 @@ const findLinks = (content, filePath) => {
   const regex = /\[([^\]]+)]\(([^)]+)\)/g;
   //array vacio pa guardar el objeto que tiene las propiedades text--href--file
   const links = [];
-
   // si hay coincidencias en el contenido se ejecuta el bucle
   for (
     let match = regex.exec(content);
@@ -74,6 +75,10 @@ const findLinks = (content, filePath) => {
   }
 
   return links;
+};
+
+const validateLinks = (links) => {
+  
 };
 
 module.exports = { checkingPath, checkingFile, findLinks };
