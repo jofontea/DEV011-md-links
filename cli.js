@@ -2,7 +2,9 @@ const mdLinks = require("./md-links.js");
 
 const examplePath = process.argv[2];
 
-mdLinks(examplePath)
+// true representa un valor para el parámetro validate, y significa que se está solicitando 
+// que se realice la validación de los enlaces 
+mdLinks(examplePath, true)
   .then((result) => {
     console.log("resultado", result);
   })

@@ -1,6 +1,6 @@
 const path = require("path");
 const fs = require("fs");
-const axios = require('axios');
+const axios = require("axios");
 
 // verificar si la ruta es absoluta
 const checkingPath = (route) => {
@@ -77,8 +77,54 @@ const findLinks = (content, filePath) => {
   return links;
 };
 
-const validateLinks = (links) => {
-  
+getHttpStatus = (url) => {
+  return (
+    axios
+      // solicitud HEAD obtiene info del encabezado de la respuesta sin descargar todo
+      .head(url)
+      // si todo ok, la función then se ejecuta y retorna el código de estado
+      .then((response) => response.status)
+      // si algo falla
+      .catch((error) => {
+        // verificar si el objeto error tiene propiedad response (respuesta del servidor)
+        if (error.response) {
+          // si existe response, se pide status para tener el código de estado de esa respuesta de error
+          return error.response.status;
+        } else {
+          // si la propiedad response no existe en error, se retorna status 404
+          return 404;
+        }
+      })
+  );
 };
 
-module.exports = { checkingPath, checkingFile, findLinks };
+const validateLinks = (links) => {
+  // método map en (links) para crear un nuevo arreglo
+  const linkPromises = links.map((link) => {
+    return getHttpStatus(link.href)
+      .then((status) => {
+        // Si todo ok, el código de estado se asigna a la propiedad status del objeto link
+        link.status = status;
+        // ok = se establece si el código de estado está en el rango 200-399 // si no = fail
+        link.ok = status >= 200 && status < 400 ? "ok" : "fail";
+        // el objeto link modificado se retorna como resultado de la promesa
+        return link;
+      })
+      // si hay algun error 
+      .catch(() => {
+        // se asigna el código de estado 404 a status y ok se establece en "fail".
+        link.status = 404;
+        link.ok = "fail";
+        return link;
+      });
+  });
+  return Promise.all(linkPromises);
+};
+
+module.exports = {
+  checkingPath,
+  checkingFile,
+  findLinks,
+  validateLinks,
+  getHttpStatus,
+};

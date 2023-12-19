@@ -1,4 +1,111 @@
-const { checkingPath, checkingFile, findLinks } = require("../functions.js");
+const {
+  checkingPath,
+  checkingFile,
+  findLinks,
+  getHttpStatus,
+  validateLinks,
+} = require("../functions.js");
+
+const axios = require("axios");
+
+jest.mock("axios");
+
+describe("getHttpStatus", () => {
+  it("Debería devolver status 200 para una solicitud exitosa", async () => {
+    axios.head.mockResolvedValue({ status: 200 });
+
+    const status = await getHttpStatus(
+      "https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Regular_expressions"
+    );
+
+    expect(status).toBe(200);
+  });
+
+  it("Debería devolver status 404 para una solicitud no encontrada", async () => {
+    axios.head.mockRejectedValue({ response: { status: 404 } });
+
+    const status = await getHttpStatus("http://cualquiercosaaaa.com");
+
+    expect(status).toBe(404);
+  });
+});
+
+describe("validateLinks", () => {
+  it("Debería devolver un array vacío cuando el input no contiene nada", async () => {
+    // Configurar mocks (no importa, ya que el array de entrada está vacío)
+    axios.head.mockResolvedValue({ status: 200 });
+    // Datos de ejemplo (array vacío)
+    const links = [];
+    // Ejecutar la función que se está probando
+    const result = await validateLinks(links);
+    // Verificar que el resultado sea un array vacío
+    expect(result).toEqual([]);
+  });
+
+  it("Debería añadir las propiedades ok y status al array", async () => {
+    // Configurar mocks para simular respuestas exitosas
+    axios.head
+      .mockResolvedValueOnce({ status: 200 })
+      .mockResolvedValueOnce({ status: 404 });
+
+    // Datos de ejemplo
+    const links = [
+      {
+        href: "https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Regular_expressions",
+        text: "Patrones para coincidencia de caracteres con expresiones regulares - mozilla.org",
+        file: "C:/md-links/DEV011-md-links/README.md",
+      },
+      {
+        href: "./docs/03-milestone.md",
+        text: "Hito 3",
+        file: "C:/md-links/DEV011-md-links/README.md",
+      },
+    ];
+
+    // Ejecutar la función que se está probando
+    const result = await validateLinks(links);
+
+    // Verificar que los resultados tengan las nuevas propiedades
+    expect(result).toEqual([
+      {
+        href: "https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Regular_expressions",
+        text: "Patrones para coincidencia de caracteres con expresiones regulares - mozilla.org",
+        file: "C:/md-links/DEV011-md-links/README.md",
+        status: 200,
+        ok: "ok",
+      },
+      {
+        href: "./docs/03-milestone.md",
+        text: "Hito 3",
+        file: "C:/md-links/DEV011-md-links/README.md",
+        status: 404,
+        ok: "fail",
+      },
+    ]);
+  });
+  it("Debería manejar enlaces con redirección exitosa", async () => {
+    const links = [
+      {
+        href: "http://enlace-con-redireccion.com",
+        text: "Enlace con redirección",
+        file: "path/to/file.md",
+      },
+    ];
+
+    // Simula una redirección exitosa en axios.head.mockResolvedValue
+    axios.head.mockResolvedValueOnce({
+      status: 301,
+      headers: { location: "http://nuevo-enlace.com" },
+    });
+    axios.head.mockResolvedValueOnce({ status: 200 }); // Nueva ubicación
+
+    const validatedLinks = await validateLinks(links);
+
+    expect(validatedLinks[0].status).toBe(301);
+    expect(validatedLinks[0].ok).toBe("ok");
+  });
+
+});
 
 describe("checkingPath", () => {
   it("Debería convertir rutas relativas a absolutas correctamente", () => {
@@ -34,7 +141,6 @@ describe("checkingPath", () => {
       });
     });
 
-  
     it("Debería rechazar la promesa si el archivo no es válido", async () => {
       const filePath = "C:/md-links/DEV011-md-links/explaindev.json";
       await expect(checkingFile(filePath)).rejects.toMatchObject({

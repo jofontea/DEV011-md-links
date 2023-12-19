@@ -1,6 +1,7 @@
 const mdLinks = require("../md-links.js");
 const fs = require("fs");
 
+
 describe("mdLinks", () => {
   it("La función mdLinks debería devolver una promesa", () => {
     const result = mdLinks("C:/md-links/DEV011-md-links/fake-README.md");
@@ -20,7 +21,7 @@ describe("mdLinks", () => {
       expect(result).toEqual(result);
     });
   });
-  
+
   it("La promesa debe devolver los primeros dos links cuando se resuelve", async () => {
     const realPath = "C:/md-links/DEV011-md-links/fake-README.md";
     const result = await mdLinks(realPath);
@@ -66,5 +67,15 @@ describe("mdLinks", () => {
     const fakePath = "this/path/is/fake.md";
     const result = await fs.existsSync(fakePath);
     expect(result).toBe(false);
+  });
+
+  it("Debería resolver la promesa con links cuando validate es true y false en el mismo bloque", async () => {
+    const realPath = "C:/md-links/DEV011-md-links/fake-README.md";
+    const linksWithoutValidation = await mdLinks(realPath, false);
+    const linksWithValidation = await mdLinks(realPath, true);
+
+    // Ensure both sets of links are resolved
+    expect(linksWithoutValidation).toHaveLength(5); // Update the expected length based on your data
+    expect(linksWithValidation).toHaveLength(5); // Update the expected length based on your data
   });
 });

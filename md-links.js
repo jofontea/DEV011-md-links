@@ -1,6 +1,10 @@
 const fs = require("fs");
-const path = require("path");
-const { checkingPath, checkingFile, findLinks } = require("./functions.js");
+const {
+  checkingPath,
+  checkingFile,
+  findLinks,
+  validateLinks,
+} = require("./functions.js");
 
 const mdLinks = (path, validate) => {
   return new Promise((resolve, reject) => {
@@ -17,7 +21,13 @@ const mdLinks = (path, validate) => {
           if (result.isValid) {
             //llamo a findLinks pa extraer los links
             const links = findLinks(result.content, cleanPath);
-            resolve(links);
+            if (validate) {
+              validateLinks(links)
+                .then((validatedLinks) => resolve(validatedLinks))
+                .catch((error) => reject(error));
+            } else {
+              resolve(links);
+            }
           } else {
             reject({ message: result.errorMessage, path: cleanPath });
           }
