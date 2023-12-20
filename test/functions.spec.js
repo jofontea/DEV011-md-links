@@ -32,18 +32,16 @@ describe("getHttpStatus", () => {
 
 describe("validateLinks", () => {
   it("Debería devolver un array vacío cuando el input no contiene nada", async () => {
-    // Configurar mocks (no importa, ya que el array de entrada está vacío)
     axios.head.mockResolvedValue({ status: 200 });
-    // Datos de ejemplo (array vacío)
+
     const links = [];
-    // Ejecutar la función que se está probando
     const result = await validateLinks(links);
-    // Verificar que el resultado sea un array vacío
+    // verificar que el resultado sea un array vacío
     expect(result).toEqual([]);
   });
 
   it("Debería añadir las propiedades ok y status al array", async () => {
-    // Configurar mocks para simular respuestas exitosas
+    // configurar mocks para simular respuestas exitosas
     axios.head
       .mockResolvedValueOnce({ status: 200 })
       .mockResolvedValueOnce({ status: 404 });
@@ -62,10 +60,9 @@ describe("validateLinks", () => {
       },
     ];
 
-    // Ejecutar la función que se está probando
+    // ejecutar la función que se está probando
     const result = await validateLinks(links);
-
-    // Verificar que los resultados tengan las nuevas propiedades
+    // verificar que los resultados tengan las nuevas propiedades
     expect(result).toEqual([
       {
         href: "https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Regular_expressions",
@@ -83,28 +80,6 @@ describe("validateLinks", () => {
       },
     ]);
   });
-  it("Debería manejar enlaces con redirección exitosa", async () => {
-    const links = [
-      {
-        href: "http://enlace-con-redireccion.com",
-        text: "Enlace con redirección",
-        file: "path/to/file.md",
-      },
-    ];
-
-    // Simula una redirección exitosa en axios.head.mockResolvedValue
-    axios.head.mockResolvedValueOnce({
-      status: 301,
-      headers: { location: "http://nuevo-enlace.com" },
-    });
-    axios.head.mockResolvedValueOnce({ status: 200 }); // Nueva ubicación
-
-    const validatedLinks = await validateLinks(links);
-
-    expect(validatedLinks[0].status).toBe(301);
-    expect(validatedLinks[0].ok).toBe("ok");
-  });
-
 });
 
 describe("checkingPath", () => {

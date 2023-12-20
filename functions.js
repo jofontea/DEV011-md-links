@@ -80,7 +80,7 @@ const findLinks = (content, filePath) => {
 getHttpStatus = (url) => {
   return (
     axios
-      // solicitud HEAD obtiene info del encabezado de la respuesta sin descargar todo
+      // solicitud HEAD-- info del encabezado de la respuesta sin descargar todo
       .head(url)
       // si todo ok, la función then se ejecuta y retorna el código de estado
       .then((response) => response.status)
@@ -103,7 +103,7 @@ const validateLinks = (links) => {
   const linkPromises = links.map((link) => {
     return getHttpStatus(link.href)
       .then((status) => {
-        // Si todo ok, el código de estado se asigna a la propiedad status del objeto link
+        // si todo bien, el código de estado se asigna a la propiedad status del objeto link
         link.status = status;
         // ok = se establece si el código de estado está en el rango 200-399 // si no = fail
         link.ok = status >= 200 && status < 400 ? "ok" : "fail";

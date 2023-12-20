@@ -74,8 +74,7 @@ describe("mdLinks", () => {
     const linksWithoutValidation = await mdLinks(realPath, false);
     const linksWithValidation = await mdLinks(realPath, true);
 
-    // Ensure both sets of links are resolved
-    expect(linksWithoutValidation).toHaveLength(5); // Update the expected length based on your data
-    expect(linksWithValidation).toHaveLength(5); // Update the expected length based on your data
+    expect(linksWithoutValidation).toHaveLength(5); // 
+    expect(linksWithValidation).toHaveLength(5); // 
   });
 });

@@ -17,15 +17,20 @@ const mdLinks = (path, validate) => {
       checkingFile(cleanPath)
         // si todo ok
         .then((result) => {
-          // si true
+          // si la extensión es valida
           if (result.isValid) {
             //llamo a findLinks pa extraer los links
             const links = findLinks(result.content, cleanPath);
+            // si se especifica la validación
             if (validate) {
+              // llamo a validateLinks para validar los links
               validateLinks(links)
+                // la promesa se resuelve con el array de links validados
                 .then((validatedLinks) => resolve(validatedLinks))
+                //  si hay algun error con la validación, la promesa se rechaza
                 .catch((error) => reject(error));
             } else {
+              // si no se especifica la validación, resuelve con los links
               resolve(links);
             }
           } else {
