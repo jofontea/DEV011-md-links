@@ -92,7 +92,7 @@ describe("mdLinks", () => {
     const realPath = "C:/md-links/DEV011-md-links/fake-README-ok.md";
     const validatedLinks = await mdLinks(realPath, { validate: true });
     
-    // Asegúrate de que todos los enlaces tengan la propiedad 'ok' definida como true
+
     expect(validatedLinks.every(link => link.ok === 'ok')).toBe(true);
   });
   it("Debería resolver la promesa con estadísticas y validación cuando las opciones son combinadas", async () => {
