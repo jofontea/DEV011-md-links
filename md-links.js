@@ -4,9 +4,11 @@ const {
   checkingFile,
   findLinks,
   validateLinks,
+  getStats,
+  combineStatsAndValidate,
 } = require("./functions.js");
 
-const mdLinks = (path, validate) => {
+const mdLinks = (path, options = {}) => {
   return new Promise((resolve, reject) => {
     const absolutePath = checkingPath(path);
     const cleanPath = absolutePath.replace(/\\/g, "/");
@@ -21,16 +23,23 @@ const mdLinks = (path, validate) => {
           if (result.isValid) {
             //llamo a findLinks pa extraer los links
             const links = findLinks(result.content, cleanPath);
-            // si se especifica la validación
-            if (validate) {
-              // llamo a validateLinks para validar los links
-              validateLinks(links)
-                // la promesa se resuelve con el array de links validados
-                .then((validatedLinks) => resolve(validatedLinks))
-                //  si hay algun error con la validación, la promesa se rechaza
+
+            if (options.validate && options.stats) {
+              combineStatsAndValidate(links, options)
+                .then((statsAndValidation) => resolve(statsAndValidation))
                 .catch((error) => reject(error));
+            } else if (options.validate) {
+              validateLinks(links)
+                .then((validatedLinks) => resolve(validatedLinks))
+                .catch((error) => reject(error));
+            } else if (options.validate) {
+              validateLinks(links)
+                .then((validatedLinks) => resolve(validatedLinks))
+                .catch((error) => reject(error));
+            } else if (options.stats) {
+              const stats = getStats(links);
+              resolve(stats);
             } else {
-              // si no se especifica la validación, resuelve con los links
               resolve(links);
             }
           } else {
@@ -45,5 +54,4 @@ const mdLinks = (path, validate) => {
     }
   });
 };
-
 module.exports = mdLinks;

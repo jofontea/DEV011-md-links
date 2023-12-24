@@ -4,11 +4,14 @@ const {
   findLinks,
   getHttpStatus,
   validateLinks,
+  getStats,
+  statsValidateCombined,
 } = require("../functions.js");
-
 const axios = require("axios");
+const { mdLinks } = require("../md-links.js");
 
 jest.mock("axios");
+jest.mock("../md-links.js");
 
 describe("getHttpStatus", () => {
   it("Debería devolver status 200 para una solicitud exitosa", async () => {
@@ -136,6 +139,32 @@ describe("checkingPath", () => {
       expect(links[0].href).toBe("https://estoesunlink.com");
       expect(links[0].text).toBe("link");
       expect(links[0].file).toBe(filePath);
+    });
+  });
+});
+describe("getStats", () => {
+  it("debería devolver estadísticas correctamente", () => {
+    const links = [
+      { href: "http://example.com", ok: "ok" },
+      { href: "http://example2.com", ok: "ok" },
+      { href: "http://example3.com", ok: "fail" },
+    ];
+
+    const result = getStats(links);
+
+    expect(result).toEqual({
+      total: 3,
+      unique: 3,
+    });
+  });
+  it("debería devolver estadísticas correctamente para una entrada vacía", () => {
+    const links = [];
+
+    const result = getStats(links);
+
+    expect(result).toEqual({
+      total: 0,
+      unique: 0,
     });
   });
 });

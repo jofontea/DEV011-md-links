@@ -1,6 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const axios = require("axios");
+const mdLinks = require("./md-links");
 
 // verificar si la ruta es absoluta
 const checkingPath = (route) => {
@@ -101,30 +102,61 @@ getHttpStatus = (url) => {
 const validateLinks = (links) => {
   // método map en (links) para crear un nuevo arreglo
   const linkPromises = links.map((link) => {
-    return getHttpStatus(link.href)
-      .then((status) => {
-        // si todo bien, el código de estado se asigna a la propiedad status del objeto link
-        link.status = status;
-        // ok = se establece si el código de estado está en el rango 200-399 // si no = fail
-        link.ok = status >= 200 && status < 400 ? "ok" : "fail";
-        // el objeto link modificado se retorna como resultado de la promesa
-        return link;
-      })
-      // si hay algun error 
-      .catch(() => {
-        // se asigna el código de estado 404 a status y ok se establece en "fail".
-        link.status = 404;
-        link.ok = "fail";
-        return link;
-      });
+    return (
+      getHttpStatus(link.href)
+        .then((status) => {
+          // si todo bien, el código de estado se asigna a la propiedad status del objeto link
+          link.status = status;
+          // ok = se establece si el código de estado está en el rango 200-399 // si no = fail
+          link.ok = status >= 200 && status < 400 ? "ok" : "fail";
+          // el objeto link modificado se retorna como resultado de la promesa
+          return link;
+        })
+        // si hay algun error
+        .catch(() => {
+          // se asigna el código de estado 404 a status y ok se establece en "fail".
+          link.status = 404;
+          link.ok = "fail";
+          return link;
+        })
+    );
   });
   return Promise.all(linkPromises);
 };
 
+const getStats = (validatedLinks) => {
+  const totalLinks = validatedLinks.length;
+  const uniqueLinks = new Set(validatedLinks.map((link) => link.href)).size;
+  return {
+    total: totalLinks,
+    unique: uniqueLinks,
+  };
+};
+
+const combineStatsAndValidate = (links, options) => {
+  if (options.validate) {
+    return validateLinks(links).then((validatedLinks) => {
+      const stats = getStats(validatedLinks);
+      const activeLinks = validatedLinks.filter((link) => link.ok === "ok").length;
+      const brokenLinks = validatedLinks.filter((link) => link.ok === "fail").length;
+
+      return {
+        ...stats,
+        active: activeLinks,
+        broken: brokenLinks,
+      };
+    });
+  } else {
+    const stats = getStats(links);
+    return Promise.resolve(stats);
+  }
+};
 module.exports = {
   checkingPath,
   checkingFile,
   findLinks,
   validateLinks,
   getHttpStatus,
+  getStats,
+  combineStatsAndValidate,
 };
