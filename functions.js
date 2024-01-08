@@ -1,7 +1,6 @@
 const path = require("path");
 const fs = require("fs");
 const axios = require("axios");
-const mdLinks = require("./md-links");
 
 const checkingPath = (route) => {
   // verificar si la ruta es absoluta y convertirla si no lo es
