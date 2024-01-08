@@ -1,6 +1,6 @@
 {
   "name": "jofontea-md-links",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Librería para extraer enlaces de archivos Markdown y realizar diversas operaciones con estos",
   "keywords": ["markdown", "links"],
   "main": "cli.js",
