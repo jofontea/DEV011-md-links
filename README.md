@@ -1,6 +1,6 @@
 # jofontea-md-links
 
-`jofontea-md-links` es una biblioteca para extraer enlaces de archivos Markdown y realizar diversas operaciones como validación y estadísticas.
+`jofontea-md-links` es una librería para extraer enlaces de archivos Markdown y realizar diversas operaciones como validación y estadísticas.
 ## Índice
 - [Instalación](#instalación)
 - [Uso](#uso)
