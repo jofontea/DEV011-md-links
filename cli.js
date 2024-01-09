@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const mdLinks = require("./md-links.js");
 
 // obtiene el 3er elemento de process.argv que corresponde a la ruta que proporciona el user

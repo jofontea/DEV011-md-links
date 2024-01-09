@@ -21,7 +21,7 @@ const checkingFile = (filePath) => {
     if (fs.existsSync(filePath)) {
       // si el archivo existe, se obtiene su extensión con path.extname
       const extOfTheFile = path.extname(filePath);
-      //condición que verifica si existe alguna coincidencia extensión válida
+      // condición que verifica si existe alguna coincidencia entre la exp reg y la extensión
       if (validExtensions.test(extOfTheFile)) {
         // si coincide alguna extensión, se lee el contenido del archivo con fs.readFile
         // filePath: ruta | "utf-8": codificación del archivo, se específica que debe leerse como texto
@@ -62,11 +62,11 @@ const checkingFile = (filePath) => {
   });
 };
 
-//findLinks toma como parametros el contenido del archivo md y la ruta de este
+//findLinks toma como parámetros el contenido del archivo md y la ruta de este
 const findLinks = (content, filePath) => {
-  //expresión regular que busca enlaces
+  // expresión regular que busca enlaces md
   const regex = /\[([^\]]+)]\(([^)]+)\)/g;
-  //array vacio para guardar el objeto que tiene las propiedades text--href--file
+  // array vacio para guardar el objeto que tendrá las propiedades text--href--file
   const links = [];
   // se utliza un bucle for para encontrar coincidencias en el contenido
   for (

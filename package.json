@@ -1,9 +1,9 @@
 {
   "name": "jofontea-md-links",
-  "version": "0.1.5",
+  "version": "0.1.9",
   "description": "Librería para extraer enlaces de archivos Markdown y realizar diversas operaciones con estos",
-  "keywords": ["markdown", "links"],
-  "main": "cli.js",
+  "keywords": ["markdown", "links", "mdlinks"],
+  "main": "./md-links.js",
   "author": {
     "name": "Josefa Fontecilla",
     "email": "fontecillajosefa10@gmail.com",
@@ -13,7 +13,8 @@
     "node": ">=16.x"
   },
   "bin": {
-    "jofontea-md-links": "cli.js"
+    "name": "md-links",
+    "mdlinks": "./cli.js"
   },
   
   "bootcamp": {
@@ -34,4 +35,6 @@
   "scripts": {
     "test": "jest --coverage --verbose"
   }
+
+
 }
