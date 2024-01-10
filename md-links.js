@@ -48,14 +48,15 @@ const mdLinks = (path, options = {}) => {
             } else {
               resolve(links);
             }
-            // la promesa se rechaza si no hay una extensión válida
+            // manejo de errores
           } else {
             reject({ message: result.errorMessage, path: cleanPath });
           }
         })
-        // manejo de errores generales
-        .catch((error) => {
-          reject(error);
+        // error en caso de que no haya una extensión válida
+       .catch((error) => {
+        console.error("Ocurrió un error", error);
+          reject({ message: "La extensión del archivo no es válida", path: cleanPath });
         });
       // la promesa se rechaza si la ruta no existe
     } else {

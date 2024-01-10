@@ -28,28 +28,28 @@ npm install jofontea-md-links
 Para obtener información sobre los enlaces en un archivo Markdown, utiliza el siguiente comando:
 
 ```bash
-jofontea-md-links "ruta/al/archivo.md"
+mdlinks "ruta/al/archivo.md"
 ```
 El resultado será un array que muestra información sobre los enlaces, como el href (URL), el text (texto del enlace) y la file (ruta del archivo).
 
 ## Validar enlaces
 Para validar el estado de los enlaces en un archivo Markdown, utiliza el siguiente comando:
 ```bash
-jofontea-md-links "ruta/al/archivo.md" --validate
+mdlinks "ruta/al/archivo.md" --validate
 ```
 El resultado mostrará información adicional, como el status (código de estado HTTP) y el ok (estado de la validación).
 
 ## Estadísticas de enlaces
 Para obtener estadísticas básicas sobre los enlaces en un archivo Markdown, utiliza el siguiente comando:
 ```bash
-jofontea-md-links "ruta/al/archivo.md" --stats
+mdlinks "ruta/al/archivo.md" --stats
 ```
 El resultado mostrará el número total de enlaces y el número de enlaces únicos.
 
 ## Validar enlaces y obtener estadísticas
 Para realizar una validación de enlaces y obtener estadísticas al mismo tiempo, utiliza el siguiente comando:
 ```bash
-jofontea-md-links "ruta/al/archivo.md" --stats --validate
+mdlinks "ruta/al/archivo.md" --stats --validate
 ```
 El resultado mostrará el número total de enlaces, el número de enlaces únicos, el número de enlaces activos y el número de enlaces rotos.
 
@@ -57,7 +57,7 @@ El resultado mostrará el número total de enlaces, el número de enlaces único
 
 ## Resultado solo con la ruta
 ```bash
-jofontea-md-links "fake-README.md"
+mdlinks "fake-README.md"
 
 Resultado links [
   {
@@ -69,7 +69,7 @@ Resultado links [
 ```
 ## Resultado con --validate
 ```bash
-jofontea-md-links "fake-README.md" --validate
+mdlinks "fake-README.md" --validate
 
 Resultado de validación [
   {
@@ -83,14 +83,14 @@ Resultado de validación [
 ```
 ## Resultado con --stats
 ```bash
-jofontea-md-links "fake-README.md" --stats
+mdlinks "fake-README.md" --stats
 
 Estadísticas { total: 5, unique: 5 }
 ```
 
 ## Resultado con --stats y --validate
 ```bash
-jofontea-md-links "fake-README.md" --stats --validate
+mdlinks "fake-README.md" --stats --validate
 
 Resultado de validación y estadísticas { total: 5, unique: 5, active: 2, broken: 3 }
 ```
