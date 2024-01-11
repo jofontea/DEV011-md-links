@@ -20,29 +20,20 @@ describe("mdLinks", () => {
     const expectedLinks = [
       {
         file: "C:/md-links/DEV011-md-links/fake-README.md",
-        href: "#1-consideraciones-generales",
-        text: "1. Consideraciones generales",
+        href: "https://github.com/Laboratoria/bootcamp/assets/92090/2b45f653-69a5-4282-a65c-d34125c36113",
+        text: "Una lupa sobre texto de libro"
       },
       {
         file: "C:/md-links/DEV011-md-links/fake-README.md",
-        href: "#2-preámbulo",
-        text: "2. Preámbulo",
+        href: "https://unsplash.com/fr/@andallthings?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText",
+        text: "ethan",
       },
       {
         file: "C:/md-links/DEV011-md-links/fake-README.md",
-        href: "#1-consideraciones-generales",
-        text: "1. Consideraciones generales",
+        href: "https://unsplash.com/es/fotos/72NpWZJOskU?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText",
+        text: "Unsplash",
       },
-      {
-        file: "C:/md-links/DEV011-md-links/fake-README.md",
-        href: "#2-preámbulo",
-        text: "2. Preámbulo",
-      },
-      {
-        file: "C:/md-links/DEV011-md-links/fake-README.md",
-        href: "#2-preámbulo",
-        text: "2. Preámbulo",
-      },
+      
     ];
     expect(result).toEqual(expect.arrayContaining(expectedLinks));
     expect(result.length).toBe(expectedLinks.length);
@@ -51,13 +42,13 @@ describe("mdLinks", () => {
   it("Debería resolver la promesa con links cuando validate es true", async () => {
     const realPath = "C:/md-links/DEV011-md-links/fake-README.md";
     const linksWithValidation = await mdLinks(realPath,  { validate: true });
-    expect(linksWithValidation).toHaveLength(5); 
+    expect(linksWithValidation).toHaveLength(3); 
   });
 
   it("Debería resolver la promesa con links cuando validate es false", async () => {
     const realPath = "C:/md-links/DEV011-md-links/fake-README.md";
     const linksWithoutValidation = await mdLinks(realPath,  { validate: false });
-    expect(linksWithoutValidation).toHaveLength(5); 
+    expect(linksWithoutValidation).toHaveLength(3); 
   });
 
   it("Debería resolver la promesa con estadísticas cuando la opción stats es true", async () => {
@@ -65,8 +56,8 @@ describe("mdLinks", () => {
     const statsResult = await mdLinks(realPath, { stats: true });
 
     const expectedStats = {
-      total: 5,
-      unique: 5,
+      total: 3,
+      unique: 3,
     };
     expect(statsResult).toEqual(expectedStats);
   });

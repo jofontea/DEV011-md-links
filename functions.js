@@ -65,7 +65,7 @@ const checkingFile = (filePath) => {
 //findLinks toma como parámetros el contenido del archivo md y la ruta de este
 const findLinks = (content, filePath) => {
   // expresión regular que busca enlaces md
-  const regex = /\[([^\]]+)]\(([^)]+)\)/g;
+  const regex = /\[([^\]]+)]\((https?[^\)]+)\)/g;
   // array vacio para guardar el objeto que tendrá las propiedades text--href--file
   const links = [];
   // se utliza un bucle for para encontrar coincidencias en el contenido
