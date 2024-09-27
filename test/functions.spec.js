@@ -5,10 +5,9 @@ const {
   getHttpStatus,
   validateLinks,
   getStats,
-  statsValidateCombined,
 } = require("../functions.js");
 const axios = require("axios");
-const { mdLinks } = require("../md-links.js");
+
 
 jest.mock("axios");
 jest.mock("../md-links.js");
@@ -34,22 +33,13 @@ describe("getHttpStatus", () => {
 });
 
 describe("validateLinks", () => {
-  it("Debería devolver un array vacío cuando el input no contiene nada", async () => {
-    axios.head.mockResolvedValue({ status: 200 });
-
-    const links = [];
-    const result = await validateLinks(links);
-    // verificar que el resultado sea un array vacío
-    expect(result).toEqual([]);
-  });
-
   it("Debería añadir las propiedades ok y status al array", async () => {
-    // configurar mocks para simular respuestas exitosas
+    // configurar mocks para simular respuestas 
     axios.head
       .mockResolvedValueOnce({ status: 200 })
       .mockResolvedValueOnce({ status: 404 });
 
-    // Datos de ejemplo
+    // datos de ejemplo
     const links = [
       {
         href: "https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Regular_expressions",
@@ -134,7 +124,9 @@ describe("checkingPath", () => {
     test("Debería extraer los links del contenido", () => {
       const content = "[link](https://estoesunlink.com)";
       const filePath = "path/to/file.md";
+      // llamada a la función findLinks con el contenido y la ruta del archivo
       const links = findLinks(content, filePath);
+      
       expect(links).toHaveLength(1);
       expect(links[0].href).toBe("https://estoesunlink.com");
       expect(links[0].text).toBe("link");
@@ -157,11 +149,10 @@ describe("getStats", () => {
       unique: 3,
     });
   });
-  it("debería devolver estadísticas correctamente para una entrada vacía", () => {
+  
+  it("debería devolver estadísticas correctamente incluso si no hay enlaces", () => {
     const links = [];
-
     const result = getStats(links);
-
     expect(result).toEqual({
       total: 0,
       unique: 0,

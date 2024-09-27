@@ -1,13 +1,14 @@
+#!/usr/bin/env node
 const mdLinks = require("./md-links.js");
 
+// obtiene el 3er elemento de process.argv que corresponde a la ruta que proporciona el user
 const examplePath = process.argv[2];
+// se crea el objeto options que tiene --validate y --stats
 const options = {
   validate: process.argv.includes("--validate"),
   stats: process.argv.includes("--stats"),
 };
-
-// true representa un valor para el parámetro validate, y significa que se está solicitando
-// que se realice la validación de los enlaces
+// toma como parámetros la ruta pasada por el usuario y el objeto options
 mdLinks(examplePath, options)
   .then((result) => {
     if (options.validate && options.stats) {
